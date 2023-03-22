@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-app-deploy
+  labels:
+    name: portfolio-app
+    app: website
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: portfolio-app-pod
+      app: website
+  template:
+    metadata:
+      name: portfolio-app-pod
+      labels:
+        name: portfolio-app-pod
+        app: website
+    spec:
+      containers:
+        - name: portfolio-app
+          image: chinonsonw/portfolio:1.0
+          ports:
+            - containerPort: 80
+
