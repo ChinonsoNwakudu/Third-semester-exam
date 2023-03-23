@@ -35,7 +35,7 @@ output "endpoint" {
 # IAM Role for EKS Cluster
 
 resource "aws_iam_role" "eksclusterrole" {
-  name = "eks-cluster-role"
+  name = "eksnodegroup"
 
   assume_role_policy = <<POLICY
 {
