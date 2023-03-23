@@ -1,8 +1,10 @@
+#-----------------------
 # EKS CLuster Definition
+#-----------------------
 
-resource "aws_eks_cluster" "eks-cluster" {
+resource "aws_eks_cluster" "eksdemo" {
   name     = "Eks-cluster"
-  role_arn = aws_iam_role.eks-cluster-role.arn
+  role_arn = aws_iam_role.eksdemorole.arn 
 
 
   vpc_config {
@@ -11,14 +13,14 @@ resource "aws_eks_cluster" "eks-cluster" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.eksnoderole-AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.eksnoderole-AmazonEKSVPCResourceController,
+    aws_iam_role_policy_attachment.eksdemorole-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.eksdemorole-AmazonEKSVPCResourceController,
   ]
 }
 
 
 output "endpoint" {
-  value = aws_eks_cluster.eks-cluster.endpoint
+  value = aws_eks_cluster.eksdemo.endpoint
 }
 
 # output "node_group_ids" {
@@ -30,11 +32,12 @@ output "endpoint" {
 
 
 
-
+#-------------------------
 # IAM Role for EKS Cluster
+#-------------------------
 
-resource "aws_iam_role" "eksclusterrole" {
-  name = "eksnodegroup"
+resource "aws_iam_role" "eksdemorole" {
+  name = "eks-cluster-role"
 
   assume_role_policy = <<POLICY
 {
@@ -52,31 +55,32 @@ resource "aws_iam_role" "eksclusterrole" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "eksnoderole-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "eksdemorole-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks-cluster-role.name
+  role       = aws_iam_role.eksdemorole.name
 }
 
-resource "aws_iam_role_policy_attachment" "eksnoderole-AmazonEKSVPCResourceController" {
+resource "aws_iam_role_policy_attachment" "eksdemorole-AmazonEKSVPCResourceController" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role       = aws_iam_role.eks-cluster-role.name
+  role       = aws_iam_role.eksdemorole.name
 }
 
 
 
 
 
-
+#--------------------------------------
 # Enabling IAM Role for Service Account
+#--------------------------------------
 
 data "tls_certificate" "ekstls" {
-  url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+  url = aws_eks_cluster.eksdemo.identity[0].oidc[0].issuer
 }
 
 resource "aws_iam_openid_connect_provider" "eksopidc" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.ekstls.certificates[0].sha1_fingerprint]
-  url             = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+  url             = aws_eks_cluster.eksdemo.identity[0].oidc[0].issuer
 }
 
 data "aws_iam_policy_document" "eksdoc_assume_role_policy" {
