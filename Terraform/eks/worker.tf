@@ -1,37 +1,5 @@
 
 
-resource "aws_eks_node_group" "project_group" {
-  cluster_name    = aws_eks_cluster.eks-cluster.name
-  node_group_name = "project-group"
-  node_role_arn   = aws_iam_role.eks-cluster-role.arn
-  instance_types  = ["t2.large"]
-  subnet_ids      = ["subnet-009417083391ee6b9", "subnet-06b380d6079a1d08a"]
-
-
-  tags = {
-    name = "Eks-cluster"
-  }
-
-  scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 1
-  }
-
-  update_config {
-    max_unavailable = 1
-  }
-
-  depends_on = [
-    aws_iam_role_policy_attachment.eksnode-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.eksnode-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.eksnode-AmazonEC2ContainerRegistryReadOnly,
-  ]
-}
-
-
-
-
 #----------------------------
 # IAM Role for EKS Node Group
 #----------------------------
