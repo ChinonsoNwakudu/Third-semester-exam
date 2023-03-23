@@ -22,8 +22,8 @@ pipeline {
                 script {
                     dir('kubernetes') {
                         sh "aws eks --region us-east-1 update-kubeconfig --name Eks-cluster"
-                        sh "kubectl apply -f complete-demo.yaml"
                         sh "kubectl apply -f --validate=false"
+                        sh "kubectl apply -f complete-demo.yaml"
                         sh "kubectl apply -f manifests-monitoring"
                         sh "kubectl apply -f deployment.yml"
                         sh "kubectl apply -f service.yml"
