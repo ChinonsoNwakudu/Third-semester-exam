@@ -66,7 +66,6 @@ metadata:
   namespace: sock-shop
 spec:
   ports:
-  - name: metrics
     # the port that this service should serve on
   - port: 80
     targetPort: 80
@@ -197,7 +196,6 @@ metadata:
   namespace: sock-shop
 spec:
   ports:
-  - name: metrics
     # the port that this service should serve on
   - port: 80
     targetPort: 80
@@ -312,9 +310,8 @@ metadata:
     name: front-end
   namespace: sock-shop
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
-  - name: metrics
   - port: 80
     targetPort: 8079
     nodePort: 30001
@@ -383,7 +380,6 @@ metadata:
   namespace: sock-shop
 spec:
   ports:
-  - name: metrics
     # the port that this service should serve on
   - port: 80
     targetPort: 80
@@ -753,7 +749,6 @@ metadata:
   namespace: sock-shop
 spec:
   ports:
-  - name: metrics
     # the port that this service should serve on
   - port: 80
     targetPort: 80
@@ -828,7 +823,6 @@ metadata:
   namespace: sock-shop
 spec:
   ports:
-  - name: metrics
     # the port that this service should serve on
   - port: 80
     targetPort: 80
@@ -893,4 +887,3 @@ spec:
     targetPort: 27017
   selector:
     name: user-db
-
